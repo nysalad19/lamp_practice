@@ -1,26 +1,26 @@
 <?php
 
-define('MODEL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/../model/');
-define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/../view/');
+define('MODEL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/model/');
+define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/view/');
 
 
-define('IMAGE_PATH', '/assets/images/');
-define('STYLESHEET_PATH', '/assets/css/');
-define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/assets/images/' );
+define('IMAGE_PATH', '/lamp_practice/www/html/assets/images/');
+define('STYLESHEET_PATH', '/lamp_practice/www/html/assets/css/');
+define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/html/assets/images/' );
 
-define('DB_HOST', 'mysql');
-define('DB_NAME', 'sample');
-define('DB_USER', 'testuser');
-define('DB_PASS', 'password');
+define('DB_HOST', '127.0.0.1');
+define('DB_NAME', 'ec_site');
+define('DB_USER', 'ec_site');
+define('DB_PASS', 'ec_site');
 define('DB_CHARSET', 'utf8');
 
-define('SIGNUP_URL', '/signup.php');
-define('LOGIN_URL', '/login.php');
-define('LOGOUT_URL', '/logout.php');
-define('HOME_URL', '/index.php');
-define('CART_URL', '/cart.php');
-define('FINISH_URL', '/finish.php');
-define('ADMIN_URL', '/admin.php');
+define('SIGNUP_URL', '/lamp_practice/www/html/signup.php');
+define('LOGIN_URL', '/lamp_practice/www/html/login.php');
+define('LOGOUT_URL', '/lamp_practice/www/html/logout.php');
+define('HOME_URL', '/lamp_practice/www/html/index.php');
+define('CART_URL', '/lamp_practice/www/html/cart.php');
+define('FINISH_URL', '/lamp_practice/www/html/finish.php');
+define('ADMIN_URL', '/lamp_practice/www/html/admin.php');
 
 define('REGEXP_ALPHANUMERIC', '/\A[0-9a-zA-Z]+\z/');
 define('REGEXP_POSITIVE_INTEGER', '/\A([1-9][0-9]*|0)\z/');
@@ -40,12 +40,12 @@ define('ITEM_NAME_LENGTH_MAX', 100);
 define('ITEM_STATUS_OPEN', 1);
 define('ITEM_STATUS_CLOSE', 0);
 
-define('PERMITTED_ITEM_STATUSES', array(
+const PERMITTED_ITEM_STATUSES = array(
   'open' => 1,
   'close' => 0,
-));
+);
 
-define('PERMITTED_IMAGE_TYPES', array(
+const PERMITTED_IMAGE_TYPES = array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
-));
+);

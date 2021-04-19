@@ -201,7 +201,7 @@ function is_valid_item_filename($filename){
 
 function is_valid_item_status($status){
   $is_valid = true;
-  if(isset(PERMITTED_ITEM_STATUSES[$status]) === false){
+  if( array_key_exists($status,PERMITTED_ITEM_STATUSES) === false){
     $is_valid = false;
   }
   return $is_valid;
