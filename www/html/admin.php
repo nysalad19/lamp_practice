@@ -1,11 +1,14 @@
 <?php
+// 定数ファイルの読み込み
 require_once '../conf/const.php';
+// 汎用関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+// userデータに関する関数ファイルを読み込み
 require_once MODEL_PATH . 'user.php';
+// itemデータに関する関数ファイルを読み込み
 require_once MODEL_PATH . 'item.php';
 
-session_start();
-
+// ログインチェックを行うため、セッションを開始する
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }

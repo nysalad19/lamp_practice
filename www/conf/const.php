@@ -1,14 +1,19 @@
 <?php
-
+// 「model」ディレクトリまでのパスを定義
 define('MODEL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/model/');
+// 「view」ディレクトリまでのパスを定義
 define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/view/');
 
-
+// 
 define('IMAGE_PATH', '/lamp_practice/www/html/assets/images/');
+// 
 define('STYLESHEET_PATH', '/lamp_practice/www/html/assets/css/');
+// 
 define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/html/assets/images/' );
 
+// 
 define('DB_HOST', '127.0.0.1');
+// 
 define('DB_NAME', 'ec_site');
 define('DB_USER', 'ec_site');
 define('DB_PASS', 'ec_site');
@@ -22,7 +27,9 @@ define('CART_URL', '/lamp_practice/www/html/cart.php');
 define('FINISH_URL', '/lamp_practice/www/html/finish.php');
 define('ADMIN_URL', '/lamp_practice/www/html/admin.php');
 
+// 正の整数と、小文字大文字のアルファベットの正規表現（数字かアルファベット1文字以上）
 define('REGEXP_ALPHANUMERIC', '/\A[0-9a-zA-Z]+\z/');
+// 正の整数の正規表現（1～9のいずれか1文字から始まる1桁以上の数字か、0）
 define('REGEXP_POSITIVE_INTEGER', '/\A([1-9][0-9]*|0)\z/');
 
 
@@ -45,6 +52,7 @@ const PERMITTED_ITEM_STATUSES = array(
   'close' => 0,
 );
 
+// 画像タイプを配列に定義する
 const PERMITTED_IMAGE_TYPES = array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
