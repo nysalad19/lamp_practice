@@ -95,6 +95,7 @@ function get_upload_filename($file){
   if(is_valid_upload_image($file) === false){
     return '';
   }
+  // 画像のタイプを$mimetype変数に代入
   $mimetype = exif_imagetype($file['tmp_name']);
   $ext = PERMITTED_IMAGE_TYPES[$mimetype];
   return get_random_string() . '.' . $ext;

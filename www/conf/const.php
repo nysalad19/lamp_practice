@@ -19,12 +19,19 @@ define('DB_USER', 'ec_site');
 define('DB_PASS', 'ec_site');
 define('DB_CHARSET', 'utf8');
 
+// サインアップページのURLを定義
 define('SIGNUP_URL', '/lamp_practice/www/html/signup.php');
+// ログインページのURLを定義
 define('LOGIN_URL', '/lamp_practice/www/html/login.php');
+// ログアウトページのURLを定義
 define('LOGOUT_URL', '/lamp_practice/www/html/logout.php');
+// インデックスページのURLを定義
 define('HOME_URL', '/lamp_practice/www/html/index.php');
+// カートページのURLを定義
 define('CART_URL', '/lamp_practice/www/html/cart.php');
+// 購入完了ページのURLを定義
 define('FINISH_URL', '/lamp_practice/www/html/finish.php');
+// 管理ページのURLを定義
 define('ADMIN_URL', '/lamp_practice/www/html/admin.php');
 
 // 正の整数と、小文字大文字のアルファベットの正規表現（数字かアルファベット1文字以上）
