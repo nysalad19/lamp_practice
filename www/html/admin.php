@@ -9,6 +9,8 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 
 // ログインチェックを行うため、セッションを開始する
+session_start();
+
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
