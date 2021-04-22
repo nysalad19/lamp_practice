@@ -17,8 +17,11 @@ define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/html/assets/
 define('DB_HOST', '127.0.0.1');
 // データベース名を定義
 define('DB_NAME', 'ec_site');
+// データベースに接続するユーザー名を定義
 define('DB_USER', 'ec_site');
+// データベースに接続するパスワードを定義
 define('DB_PASS', 'ec_site');
+// データベースの文字セットを定義
 define('DB_CHARSET', 'utf8');
 
 // サインアップページのURLを定義

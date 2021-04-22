@@ -95,18 +95,22 @@ function get_messages(){
   return $messages;
 }
 
-// セッションの「user_id」変数をブランク以外で返す
+// セッションの「user_id」配列が空かどうかブーリアン値で返す
 function is_logined(){
   return get_session('user_id') !== '';
 }
 
+// 画像が指定の拡張子以外ならブランクを返し、指定の拡張子の場合ユニークな名前をつけて返す
 function get_upload_filename($file){
+  // 画像が指定の拡張子以外でアップロードされた場合ブランクを返す
   if(is_valid_upload_image($file) === false){
     return '';
   }
   // 画像のタイプを$mimetype変数に代入
   $mimetype = exif_imagetype($file['tmp_name']);
+  // 変数に拡張子を代入する
   $ext = PERMITTED_IMAGE_TYPES[$mimetype];
+  // ランダムな文字列に（.)と拡張子を加えたものを返す
   return get_random_string() . '.' . $ext;
 }
 
@@ -155,6 +159,7 @@ function is_valid_format($string, $format){
 }
 
 // 画像が指定の拡張子でアップロードされたかをブーリアン値で返す。
+// falseの場合はセッションのエラー配列にメッセージを入れる。
 function is_valid_upload_image($image){
   // POSTメソッドでアップロードされたファイルか調べる
   if(is_uploaded_file($image['tmp_name']) === false){
