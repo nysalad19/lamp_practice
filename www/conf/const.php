@@ -1,19 +1,21 @@
 <?php
-// 「model」ディレクトリまでのパスを定義
+// modelディレクトリまでのパスを定義
 define('MODEL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/model/');
-// 「view」ディレクトリまでのパスを定義
+// viewディレクトリまでのパスを定義
 define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/view/');
 
-// 
+// WEBページを基準としたときの画像ディレクトリまでのパスを定義
 define('IMAGE_PATH', '/lamp_practice/www/html/assets/images/');
-// 
+// CSSディレクトリまでのパスを定義
 define('STYLESHEET_PATH', '/lamp_practice/www/html/assets/css/');
-// 
+// サーバー内の画像があるディレクトリまでのパスを定義
+// 内部で画像を保存するときに参照
 define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/lamp_practice/www/html/assets/images/' );
 
-// 
+// データベースに接続する情報
+// ローカルホストを定義
 define('DB_HOST', '127.0.0.1');
-// 
+// データベース名を定義
 define('DB_NAME', 'ec_site');
 define('DB_USER', 'ec_site');
 define('DB_PASS', 'ec_site');
@@ -40,20 +42,31 @@ define('REGEXP_ALPHANUMERIC', '/\A[0-9a-zA-Z]+\z/');
 define('REGEXP_POSITIVE_INTEGER', '/\A([1-9][0-9]*|0)\z/');
 
 
+// ユーザーネームの最小の長さを定義
 define('USER_NAME_LENGTH_MIN', 6);
+// ユーザーネームの最大の長さを定義
 define('USER_NAME_LENGTH_MAX', 100);
+// パスワードの最小の長さを定義
 define('USER_PASSWORD_LENGTH_MIN', 6);
+// パスワードの最大の長さを定義
 define('USER_PASSWORD_LENGTH_MAX', 100);
 
+// 管理ユーザーをタイプ1として定義
 define('USER_TYPE_ADMIN', 1);
+// 一般ユーザーをタイプ2として定義
 define('USER_TYPE_NORMAL', 2);
 
+// アイテム名の最小の長さを定義
 define('ITEM_NAME_LENGTH_MIN', 1);
+// アイテム名の最大の長さを定義
 define('ITEM_NAME_LENGTH_MAX', 100);
 
+// アイテムが公開されている時をステータス1として定義
 define('ITEM_STATUS_OPEN', 1);
+// アイテムが非公開の時をステータス2として定義
 define('ITEM_STATUS_CLOSE', 0);
 
+// アイテムの公開ステータスを配列に定義する
 const PERMITTED_ITEM_STATUSES = array(
   'open' => 1,
   'close' => 0,

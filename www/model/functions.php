@@ -49,11 +49,12 @@ function set_session($name, $value){
   $_SESSION[$name] = $value;
 }
 
-// セッションの二次元配列に値を代入する。
+// セッションの二次元配列に要素を追加する。
 function set_error($error){
   $_SESSION['__errors'][] = $error;
 }
 
+// セッションに入っているエラー情報を返し、セッションのエラー情報を空にする
 function get_errors(){
   // 「$error」変数にセッションの「__errors」キーに入っている情報を代入する
   $errors = get_session('__errors');
@@ -68,21 +69,29 @@ function get_errors(){
   return $errors;
 }
 
+// エラーがあるかどうかをブーリアン値で返す
 function has_error(){
+  // エラー配列が0でない
   return isset($_SESSION['__errors']) && count($_SESSION['__errors']) !== 0;
 }
 
-// セッションの二次元配列に値を代入する。
+// セッションのメッセージ配列に要素を追加する。
 function set_message($message){
   $_SESSION['__messages'][] = $message;
 }
 
+// セッションに入っているメッセージ情報を返し、セッションのメッセージ情報を空にする
 function get_messages(){
+  // $messages変数にセッションの「__messages」変数に入っている情報を代入
   $messages = get_session('__messages');
+  // もしセッションの「__messages」変数が空の場合
   if($messages === ''){
+    // 空の配列を返す
     return array();
   }
+  // セッションの「__errors」キーの値に空の配列を指定する
   set_session('__messages',  array());
+  // セッションの「__errors」キーに入っている情報を返す
   return $messages;
 }
 
@@ -101,6 +110,10 @@ function get_upload_filename($file){
   return get_random_string() . '.' . $ext;
 }
 
+// ランダムな文字列を先頭から20文字を返す
+// base_convert：数値の基数を任意に変換する
+// substr：文字の一部を返す
+// hash：ハッシュ値を生成する
 function get_random_string($length = 20){
   return substr(base_convert(hash('sha256', uniqid()), 16, 36), 0, $length);
 }
@@ -141,7 +154,7 @@ function is_valid_format($string, $format){
   return preg_match($format, $string) === 1;
 }
 
-
+// 画像が指定の拡張子でアップロードされたかをブーリアン値で返す。
 function is_valid_upload_image($image){
   // POSTメソッドでアップロードされたファイルか調べる
   if(is_uploaded_file($image['tmp_name']) === false){
@@ -152,7 +165,7 @@ function is_valid_upload_image($image){
   $mimetype = exif_imagetype($image['tmp_name']);
   // $mimetypeに代入された画像タイプ（キー名）が、画像タイプを定義した配列の中にない場合、
   if( array_key_exists($mimetype, PERMITTED_IMAGE_TYPES) === false ){
-    
+    // implode：配列を文字列に変換
     set_error('ファイル形式は' . implode('、', PERMITTED_IMAGE_TYPES) . 'のみ利用可能です。');
     return false;
   }
