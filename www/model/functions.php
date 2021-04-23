@@ -143,8 +143,14 @@ function delete_image($filename){
 
 
 
+// $stringの長さが、指定の最小の長さ以上PHPでサポートする
+// 長さ以下かどうかブーリアン値で返す
+// PHP_INT_MAX：PHP がサポートする整数型の最大値
 function is_valid_length($string, $minimum_length, $maximum_length = PHP_INT_MAX){
+  // $length変数に$string変数の文字列の長さを代入
   $length = mb_strlen($string);
+  // $lengthの文字列の長さが$minimum_lengthで指定した長さ以上で、
+  // $maximum_lengthで指定した長さ以下かどうかを判断してブーリアン値を返す
   return ($minimum_length <= $length) && ($length <= $maximum_length);
 }
 
