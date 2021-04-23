@@ -127,11 +127,16 @@ function save_image($image, $filename){
   return move_uploaded_file($image['tmp_name'], IMAGE_DIR . $filename);
 }
 
+// 画像ファイルがある場合、削除して「true」を返す。無い場合は「false」を返す。
 function delete_image($filename){
+  // ファイルまたはディレクトリが存在する場合
   if(file_exists(IMAGE_DIR . $filename) === true){
+    // ファイルを削除する
     unlink(IMAGE_DIR . $filename);
+    // trueを返す
     return true;
   }
+  // falseを返す
   return false;
   
 }
