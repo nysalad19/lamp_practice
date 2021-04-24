@@ -63,7 +63,7 @@
           <?php foreach($items as $item){ ?>
           <tr class="<?php print(is_open($item) ? '' : 'close_item'); ?>">
             <td><img src="<?php print(IMAGE_PATH . $item['image']);?>" class="item_image"></td>
-            <!--商品名のタグインジェクションを防ぐため、htmlエスケープ処理-->
+            <!--商品名のタグインジェクションを防ぐためのhtmlエスケープ処理-->
             <td><?php print h($item['name']); ?></td>
             <td><?php print(number_format($item['price'])); ?>円</td>
             <td>

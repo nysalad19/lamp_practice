@@ -20,7 +20,7 @@
         <div class="col-6 item">
           <div class="card h-100 text-center">
             <div class="card-header">
-              <!--商品名のタグインジェクションを防ぐため、htmlエスケープ処理-->
+              <!--商品名のタグインジェクションを防ぐためのhtmlエスケープ処理-->
               <?php print h($item['name']); ?>
             </div>
             <figure class="card-body">
