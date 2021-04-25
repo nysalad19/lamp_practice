@@ -27,6 +27,25 @@ function fetch_query($db, $sql, $params = array()){
   return false;
 }
 
+/*
+
+// SQL文を実行する。出来なかった場合、falseを返す。
+function execute_query($db, $sql, $params = array()){
+  try{
+    // SQL文を実行する準備
+    $statement = $db->prepare($sql);
+    // SQL文の実行を返す
+    return $statement->execute($params);
+    // SQL文の実行ができなかった場合
+  }catch(PDOException $e){
+    // セッションにエラー文を追加する。
+    set_error('更新に失敗しました。');
+  }
+  // faleseを返す
+  return false;
+}
+*/
+
 function fetch_all_query($db, $sql, $params = array()){
   try{
     $statement = $db->prepare($sql);
@@ -41,11 +60,11 @@ function fetch_all_query($db, $sql, $params = array()){
 // SQL文を実行する。出来なかった場合、falseを返す。
 function execute_query($db, $sql, $params = array()){
   try{
-    // $QLを実行する準備
+    // SQL文を実行する準備
     $statement = $db->prepare($sql);
-    // SQLの実行を返す
+    // SQL文の実行を返す
     return $statement->execute($params);
-    // SQLの実行ができなかった場合
+    // SQL文の実行ができなかった場合
   }catch(PDOException $e){
     // セッションにエラー文を追加する。
     set_error('更新に失敗しました。');

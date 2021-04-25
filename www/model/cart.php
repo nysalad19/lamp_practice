@@ -62,6 +62,7 @@ function add_cart($db, $user_id, $item_id ) {
   return update_cart_amount($db, $cart['cart_id'], $cart['amount'] + 1);
 }
 
+// カートテーブルに、商品、ユーザー、数量を指定して行を追加
 function insert_cart($db, $user_id, $item_id, $amount = 1){
   $sql = "
     INSERT INTO
@@ -70,36 +71,48 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
         user_id,
         amount
       )
-    VALUES({$item_id}, {$user_id}, {$amount})
+    VALUES(?, ?, ?)
   ";
-
-  return execute_query($db, $sql);
-}
-
-// カートに入れる数量を指定するSQL文を実行する
-function update_cart_amount($db, $cart_id, $amount){
-  $sql = "
-    UPDATE
-      carts
-    SET
-      amount = {$amount}
-    WHERE
-      cart_id = {$cart_id}
-    LIMIT 1
-  ";
+  // SQL文のプレースホルダに値をバインド
+  $statement->bindValue(1, h($item_id), PDO::PARAM_INT);
+  $statement->bindValue(2, h($user_id), PDO::PARAM_INT);
+  $statement->bindValue(3, h($amount), PDO::PARAM_INT);
   // SQLの実行を返す
   return execute_query($db, $sql);
 }
 
+// カートテーブルで、カートを指定して数量を更新
+function update_cart_amount($db, $cart_id, $amount){
+  // SQL文
+  $sql = "
+    UPDATE
+      carts
+    SET
+      amount = ?
+    WHERE
+      cart_id = ?
+    LIMIT 1
+  ";
+  // SQL文のプレースホルダに値をバインド
+  $statement->bindValue(1, h($amount), PDO::PARAM_INT);
+  $statement->bindValue(2, h($cart_id), PDO::PARAM_INT);
+  // SQLの実行を返す
+  return execute_query($db, $sql);
+}
+
+
+// カートテーブルから、カートを指定して行を削除
 function delete_cart($db, $cart_id){
   $sql = "
     DELETE FROM
       carts
     WHERE
-      cart_id = {$cart_id}
+      cart_id = ?
     LIMIT 1
   ";
-
+  // SQL文のプレースホルダに値をバインド
+  $statement->bindValue(1, h($cart_id), PDO::PARAM_INT);
+  // SQLの実行を返す
   return execute_query($db, $sql);
 }
 
@@ -120,6 +133,7 @@ function purchase_carts($db, $carts){
   delete_user_carts($db, $carts[0]['user_id']);
 }
 
+
 function delete_user_carts($db, $user_id){
   $sql = "
     DELETE FROM
@@ -127,7 +141,9 @@ function delete_user_carts($db, $user_id){
     WHERE
       user_id = {$user_id}
   ";
-
+  // SQL文のプレースホルダに値をバインド
+  $statement->bindValue(1, h($cart_id), PDO::PARAM_INT);
+  // SQLの実行を返す
   execute_query($db, $sql);
 }
 
