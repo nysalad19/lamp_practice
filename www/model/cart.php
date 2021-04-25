@@ -76,6 +76,7 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
   return execute_query($db, $sql);
 }
 
+// カートに入れる数量を指定するSQL文を実行する
 function update_cart_amount($db, $cart_id, $amount){
   $sql = "
     UPDATE
@@ -86,6 +87,7 @@ function update_cart_amount($db, $cart_id, $amount){
       cart_id = {$cart_id}
     LIMIT 1
   ";
+  // SQLの実行を返す
   return execute_query($db, $sql);
 }
 
