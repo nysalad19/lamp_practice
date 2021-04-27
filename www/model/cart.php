@@ -186,15 +186,21 @@ function validate_cart_purchase($carts){
   // 変数に入っている値を繰り返し取り出す
   foreach($carts as $cart){
     if(is_open($cart) === false){
+      // セッションにエラー文を追加する
       set_error($cart['name'] . 'は現在購入できません。');
     }
+    // 変数の「stock」キーの値－「amount」キーの値がマイナスになる場合
     if($cart['stock'] - $cart['amount'] < 0){
+      // セッションにエラー文を追加する
       set_error($cart['name'] . 'は在庫が足りません。購入可能数:' . $cart['stock']);
     }
   }
+  // エラー文がある場合
   if(has_error() === true){
+    // falseを返す
     return false;
   }
+  // trueを返す
   return true;
 }
 
