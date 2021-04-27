@@ -3,7 +3,7 @@ require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
 function get_user_carts($db, $user_id){
-  $statement = $dbh->prepare(
+  $statement = $db->prepare(
   $sql = "
     SELECT
       items.item_id,
@@ -34,7 +34,7 @@ function get_user_carts($db, $user_id){
 // ユーザーIDとアイテムIDを指定してアイテムテーブルと
 // カートテーブルの情報を取得する
 function get_user_cart($db, $user_id, $item_id){
-  $statement = $dbh->prepare(
+  $statement = $db->prepare(
   $sql = "
     SELECT
       items.item_id,
@@ -75,7 +75,7 @@ function add_cart($db, $user_id, $item_id ) {
 
 // カートテーブルに、商品、ユーザー、数量を指定して行を追加
 function insert_cart($db, $user_id, $item_id, $amount = 1){
-  $statement = $dbh->prepare(
+  $statement = $db->prepare(
   $sql = "
     INSERT INTO
       carts(
@@ -96,7 +96,7 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
 
 // カートテーブルで、カートを指定して数量を更新
 function update_cart_amount($db, $cart_id, $amount){
-  $statement = $dbh->prepare(
+  $statement = $db->prepare(
   $sql = "
     UPDATE
       carts
@@ -116,7 +116,7 @@ function update_cart_amount($db, $cart_id, $amount){
 
 // カートテーブルから、カートを指定して行を削除
 function delete_cart($db, $cart_id){
-  $statement = $dbh->prepare(
+  $statement = $db->prepare(
   $sql = "
     DELETE FROM
       carts
@@ -149,7 +149,7 @@ function purchase_carts($db, $carts){
 }
 
 function delete_user_carts($db, $user_id){
-  $statement = $dbh->prepare(
+  $statement = $db->prepare(
   $sql = "
     DELETE FROM
       carts
