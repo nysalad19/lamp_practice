@@ -167,11 +167,16 @@ function delete_user_carts($db, $user_id){
   return execute_query($db, $sql);
 }
 
+// カートの合計金額を返す
 function sum_carts($carts){
+  // 変数に0を代入する
   $total_price = 0;
+  // 変数に入っている値を繰り返し取り出す
   foreach($carts as $cart){
+    // $total_price変数に、合計金額(price*amount)を足していく
     $total_price += $cart['price'] * $cart['amount'];
   }
+  // 合計金額を返す
   return $total_price;
 }
 
@@ -203,4 +208,3 @@ function validate_cart_purchase($carts){
   // trueを返す
   return true;
 }
-
