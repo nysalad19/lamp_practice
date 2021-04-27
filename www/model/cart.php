@@ -1,7 +1,11 @@
 <?php 
+// 汎用関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+// データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
+// 指定したカートのユーザーIDの情報を
+// カートテーブルとアイテムテーブルから取得する
 function get_user_carts($db, $user_id){
   $statement = $db->prepare(
   $sql = "
@@ -172,10 +176,14 @@ function sum_carts($carts){
 }
 
 function validate_cart_purchase($carts){
+  // 変数に値が入っていない場合
   if(count($carts) === 0){
+    // セッションにエラー文を追加する
     set_error('カートに商品が入っていません。');
+    // falseを返す
     return false;
   }
+  // 変数に入っている値を繰り返し取り出す
   foreach($carts as $cart){
     if(is_open($cart) === false){
       set_error($cart['name'] . 'は現在購入できません。');
