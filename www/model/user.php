@@ -52,6 +52,7 @@ function login_as($db, $name, $password){
 }
 
 function get_login_user($db){
+  // 変数にセッションの「user_id」キーに入っている値を代入する
   $login_user_id = get_session('user_id');
 
   return get_user($db, $login_user_id);
@@ -65,7 +66,7 @@ function regist_user($db, $name, $password, $password_confirmation) {
   return insert_user($db, $name, $password);
 }
 
-//
+// ユーザーが管理者かどうか判定
 function is_admin($user){
   // ユーザーが管理者（1）ならtrue、違う場合はfalseを返す
   return $user['type'] === USER_TYPE_ADMIN;
@@ -78,16 +79,25 @@ function is_valid_user($name, $password, $password_confirmation){
   return $is_valid_user_name && $is_valid_password ;
 }
 
+// $nameの値がユーザー名の規定に沿っているか判定
 function is_valid_user_name($name) {
+  // 変数にtrueを代入
   $is_valid = true;
+  // $nameの値の長さが、規定の長さの範囲内じゃない場合
   if(is_valid_length($name, USER_NAME_LENGTH_MIN, USER_NAME_LENGTH_MAX) === false){
+    // セッションにエラー文をセットする
     set_error('ユーザー名は'. USER_NAME_LENGTH_MIN . '文字以上、' . USER_NAME_LENGTH_MAX . '文字以内にしてください。');
+    // 変数にfalseを代入
     $is_valid = false;
   }
+  // 変数が正の整数かアルファベット1文字以上ではない場合
   if(is_alphanumeric($name) === false){
+    // セッションにエラー文をセットする
     set_error('ユーザー名は半角英数字で入力してください。');
+    // 変数にfalseを代入
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
