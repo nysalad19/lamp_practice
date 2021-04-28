@@ -1,5 +1,7 @@
 <?php
+// 汎用関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+// データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
 // DB利用
@@ -146,7 +148,9 @@ function delete_item($db, $item_id){
 
 // 非DB
 
+// 商品が公開されているかを判定
 function is_open($item){
+  // 商品のステータスが1の時falseを返す
   return $item['status'] === 1;
 }
 

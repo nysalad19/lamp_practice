@@ -187,8 +187,8 @@ function sum_carts($carts){
 }
 
 // $carts変数に値が入っている場合falseを返し、
-// 入っていない場合や、在庫数が足りない場合はfalseを返し
-// エラー文をセッションに入れる
+// 値が入っていない場合、商品が公開されていない場合、
+// 在庫数が足りない場合はfalseを返してエラー文をセッションに入れる
 function validate_cart_purchase($carts){
   // $cart変数に値が入っていない場合
   if(count($carts) === 0){
@@ -199,6 +199,7 @@ function validate_cart_purchase($carts){
   }
   // 変数に入っている値を繰り返し取り出す
   foreach($carts as $cart){
+    // 商品が公開されていない場合
     if(is_open($cart) === false){
       // セッションにエラー文を追加する
       set_error($cart['name'] . 'は現在購入できません。');
