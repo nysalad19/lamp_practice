@@ -119,7 +119,7 @@ function get_upload_filename($file){
 // substr：文字の一部を返す
 // hash：ハッシュ値を生成する
 function get_random_string($length = 20){
-  return substr(base_convert(hash('sha256', uni_id()), 16, 36), 0, $length);
+  return substr(base_convert(hash('sha256', uniqid()), 16, 36), 0, $length);
 }
 
 // アップロードされた画像を一時フォルダから画像ディレクトリに移動させる
