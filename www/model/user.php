@@ -1,5 +1,7 @@
 <?php
+// 汎用関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+// データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
 function get_user($db, $user_id){
@@ -16,6 +18,7 @@ function get_user($db, $user_id){
     LIMIT 1
   ";
 
+  // レコードを取得する。出来なかった場合、falseを返す。
   return fetch_query($db, $sql);
 }
 
@@ -33,14 +36,17 @@ function get_user_by_name($db, $name){
     LIMIT 1
   ";
 
+  // レコードを取得する。出来なかった場合、falseを返す。
   return fetch_query($db, $sql);
 }
 
 function login_as($db, $name, $password){
   $user = get_user_by_name($db, $name);
   if($user === false || $user['password'] !== $password){
+    // falseを返す
     return false;
   }
+  // セッションにキーと値をセットする
   set_session('user_id', $user['user_id']);
   return $user;
 }
@@ -59,7 +65,9 @@ function regist_user($db, $name, $password, $password_confirmation) {
   return insert_user($db, $name, $password);
 }
 
+//
 function is_admin($user){
+  // ユーザーが管理者（1）ならtrue、違う場合はfalseを返す
   return $user['type'] === USER_TYPE_ADMIN;
 }
 
