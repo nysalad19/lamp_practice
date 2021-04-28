@@ -31,7 +31,7 @@ function get_user_carts($db, $user_id){
   );
   // SQL文のプレースホルダに値をバインド
   $statement->bindParam(1, h($user_id), PDO::PARAM_INT);
-  // 全レコードを取得して返す
+  // 全レコードを取得して返す、取得できなかった場合falseを返す
   return fetch_all_query($db, $sql);
 }
 
@@ -70,7 +70,10 @@ function get_user_cart($db, $user_id, $item_id){
 }
 
 function add_cart($db, $user_id, $item_id ) {
+  // カートに指定のユーザーの商品情報を入れる
+  // （ユーザーテーブルとカートテーブルから取得する）
   $cart = get_user_cart($db, $user_id, $item_id);
+  // 情報が取得できなかった場合（$cart変数にfalseが入った場合）
   if($cart === false){
     return insert_cart($db, $user_id, $item_id);
   }
@@ -136,9 +139,12 @@ function delete_cart($db, $cart_id){
 }
 
 function purchase_carts($db, $carts){
+  // カートに商品がある場合（$carts変数に値が入っている場合）
   if(validate_cart_purchase($carts) === false){
+    // falseを返す
     return false;
   }
+  // カートの中身を取り出す（変数に入っている値を繰り返し取り出す）
   foreach($carts as $cart){
     if(update_item_stock(
         $db, 
@@ -180,8 +186,11 @@ function sum_carts($carts){
   return $total_price;
 }
 
+// $carts変数に値が入っている場合falseを返し、
+// 入っていない場合や、在庫数が足りない場合はfalseを返し
+// エラー文をセッションに入れる
 function validate_cart_purchase($carts){
-  // 変数に値が入っていない場合
+  // $cart変数に値が入っていない場合
   if(count($carts) === 0){
     // セッションにエラー文を追加する
     set_error('カートに商品が入っていません。');
