@@ -175,11 +175,13 @@ function validate_item($name, $price, $stock, $filename, $status){
 }
 
 function is_valid_item_name($name){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
   if(is_valid_length($name, ITEM_NAME_LENGTH_MIN, ITEM_NAME_LENGTH_MAX) === false){
     set_error('商品名は'. ITEM_NAME_LENGTH_MIN . '文字以上、' . ITEM_NAME_LENGTH_MAX . '文字以内にしてください。');
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
@@ -189,15 +191,18 @@ function is_valid_item_price($price){
     set_error('価格は0以上の整数で入力してください。');
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
 function is_valid_item_stock($stock){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
   if(is_positive_integer($stock) === false){
     set_error('在庫数は0以上の整数で入力してください。');
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
