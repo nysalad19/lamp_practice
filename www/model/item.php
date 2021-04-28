@@ -201,18 +201,28 @@ function is_valid_item_stock($stock){
   return $is_valid;
 }
 
+// $filename変数に値があるかどうか判定（ある：true　ブランク：false）
 function is_valid_item_filename($filename){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
+  // $failename変数の値がブランクの場合
   if($filename === ''){
+    // $is_valid変数にfalseを代入
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
+// $status変数がopne又はcloseかどうかを判定（trueかfalseを返す）
 function is_valid_item_status($status){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
+  // $statusの値がアイテム公開ステータス配列のキー名に存在しない場合
   if( array_key_exists($status,PERMITTED_ITEM_STATUSES) === false){
+    // $is_valid変数にfalseを代入
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
