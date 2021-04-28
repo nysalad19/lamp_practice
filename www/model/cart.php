@@ -69,14 +69,16 @@ function get_user_cart($db, $user_id, $item_id){
   return fetch_query($db, $sql);
 }
 
+// カートに追加（カートテーブルに新規で行を追加するか、数量を更新）
 function add_cart($db, $user_id, $item_id ) {
-  // カートに指定のユーザーの商品情報を入れる
-  // （ユーザーテーブルとカートテーブルから取得する）
+  // $cart変数に指定のユーザーの商品情報を代入する
   $cart = get_user_cart($db, $user_id, $item_id);
   // 情報が取得できなかった場合（$cart変数にfalseが入った場合）
   if($cart === false){
+    // カートテーブルに、商品、ユーザー、数量を指定して行を追加
     return insert_cart($db, $user_id, $item_id);
   }
+  // // カートテーブルで、カートを指定して数量を更新
   return update_cart_amount($db, $cart['cart_id'], $cart['amount'] + 1);
 }
 
