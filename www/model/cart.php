@@ -29,6 +29,7 @@ function get_user_carts($db, $user_id){
   "
   ;
   // 全レコードを取得して返す、取得できなかった場合falseを返す
+  // 値をバインドしながら実行
   return fetch_all_query($db, $sql, array($user_id));
 }
 
@@ -58,6 +59,7 @@ function get_user_cart($db, $user_id, $item_id){
       items.item_id = ?
   ";
   // レコードを取得して返す
+  // 値をバインドしながら実行
   return fetch_query($db, $sql, array($user_id, $item_id));
 }
 
@@ -86,6 +88,7 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
     VALUES(?, ?, ?)
   ";
   // SQLの実行を返す
+  // 値をバインドしながら実行
   return execute_query($db, $sql, array($item_id, $user_id, $amount));
 }
 
@@ -101,6 +104,7 @@ function update_cart_amount($db, $cart_id, $amount){
     LIMIT 1
   ";
   // SQLの実行を返す
+  // 値をバインドしながら実行
   return execute_query($db, $sql, array($amount, $cart_id));
 }
 
@@ -114,6 +118,7 @@ function delete_cart($db, $cart_id){
     LIMIT 1 
   ";
   // SQLの実行を返す
+  // 値をバインドしながら実行
   return execute_query($db, $sql, array($cart_id));
 }
 
@@ -146,6 +151,7 @@ function delete_user_carts($db, $user_id){
   "
   ;
   // SQLの実行を返す
+  // 値をバインドしながら実行
   return execute_query($db, $sql, array($user_id));
 }
 

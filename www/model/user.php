@@ -14,12 +14,13 @@ function get_user($db, $user_id){
     FROM
       users
     WHERE
-      user_id = {$user_id}
+      user_id = ?
     LIMIT 1
   ";
 
   // レコードを取得する。出来なかった場合、falseを返す。
-  return fetch_query($db, $sql);
+  // 値をバインドしながら実行
+  return fetch_query($db, $sql, array($user_id));
 }
 
 function get_user_by_name($db, $name){
@@ -32,12 +33,13 @@ function get_user_by_name($db, $name){
     FROM
       users
     WHERE
-      name = '{$name}'
+      name = ?
     LIMIT 1
   ";
 
   // レコードを取得する。出来なかった場合、falseを返す。
-  return fetch_query($db, $sql);
+  // 値をバインドしながら実行
+  return fetch_query($db, $sql, array($name));
 }
 
 function login_as($db, $name, $password){
@@ -122,9 +124,11 @@ function insert_user($db, $name, $password){
   $sql = "
     INSERT INTO
       users(name, password)
-    VALUES ('{$name}', '{$password}');
+    VALUES (?, ?);
   ";
-
-  return execute_query($db, $sql);
+  
+  // SQLの実行を返す
+  // 値をバインドしながら実行
+  return execute_query($db, $sql, array($name, $password));
 }
 
