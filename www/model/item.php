@@ -20,7 +20,8 @@ function get_item($db, $item_id){
     WHERE
       item_id = {$item_id}
   ";
-
+  
+  // レコードを取得する。出来なかった場合、falseを返す。
   return fetch_query($db, $sql);
 }
 
@@ -42,6 +43,7 @@ function get_items($db, $is_open = false){
     ';
   }
 
+  // 全レコードを取得する。出来なかった場合、falseを返す。
   return fetch_all_query($db, $sql);
 }
 
@@ -87,6 +89,7 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
     VALUES('{$name}', {$price}, {$stock}, '{$filename}', {$status_value});
   ";
 
+  // SQL文を実行する。出来なかった場合、falseを返す。
   return execute_query($db, $sql);
 }
 
@@ -101,6 +104,7 @@ function update_item_status($db, $item_id, $status){
     LIMIT 1
   ";
   
+  // SQL文を実行する。出来なかった場合、falseを返す。
   return execute_query($db, $sql);
 }
 
@@ -115,6 +119,7 @@ function update_item_stock($db, $item_id, $stock){
     LIMIT 1
   ";
   
+  // SQL文を実行する。出来なかった場合、falseを返す。
   return execute_query($db, $sql);
 }
 
@@ -142,6 +147,7 @@ function delete_item($db, $item_id){
     LIMIT 1
   ";
   
+  // SQL文を実行する。出来なかった場合、falseを返す。
   return execute_query($db, $sql);
 }
 
