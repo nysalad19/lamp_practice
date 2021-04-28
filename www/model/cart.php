@@ -7,7 +7,6 @@ require_once MODEL_PATH . 'db.php';
 // 指定したカートのユーザーIDの情報を
 // カートテーブルとアイテムテーブルから取得する
 function get_user_carts($db, $user_id){
-  $statement = $db->prepare(
   $sql = "
     SELECT
       items.item_id,
@@ -28,17 +27,14 @@ function get_user_carts($db, $user_id){
     WHERE
       carts.user_id = ?
   "
-  );
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindParam(1, h($user_id), PDO::PARAM_INT);
+  ;
   // 全レコードを取得して返す、取得できなかった場合falseを返す
-  return fetch_all_query($db, $sql);
+  return fetch_all_query($db, $sql, array($user_id));
 }
 
 // ユーザーIDとアイテムIDを指定してアイテムテーブルと
 // カートテーブルの情報を取得する
 function get_user_cart($db, $user_id, $item_id){
-  $statement = $db->prepare(
   $sql = "
     SELECT
       items.item_id,
@@ -60,13 +56,9 @@ function get_user_cart($db, $user_id, $item_id){
       carts.user_id = ?
     AND
       items.item_id = ?
-  "
-  );
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindParam(1, h($user_id), PDO::PARAM_INT);
-  $statement->bindParam(2, h($item_id), PDO::PARAM_INT);
+  ";
   // レコードを取得して返す
-  return fetch_query($db, $sql);
+  return fetch_query($db, $sql, array($user_id, $item_id));
 }
 
 // カートに追加（カートテーブルに新規で行を追加するか、数量を更新）
@@ -78,13 +70,12 @@ function add_cart($db, $user_id, $item_id ) {
     // カートテーブルに、商品、ユーザー、数量を指定して行を追加
     return insert_cart($db, $user_id, $item_id);
   }
-  // // カートテーブルで、カートを指定して数量を更新
+  // カートテーブルで、カートを指定して数量を更新
   return update_cart_amount($db, $cart['cart_id'], $cart['amount'] + 1);
 }
 
 // カートテーブルに、商品、ユーザー、数量を指定して行を追加
 function insert_cart($db, $user_id, $item_id, $amount = 1){
-  $statement = $db->prepare(
   $sql = "
     INSERT INTO
       carts(
@@ -93,19 +84,13 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
         amount
       )
     VALUES(?, ?, ?)
-  "
-  );
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindParam(1, h($item_id), PDO::PARAM_INT);
-  $statement->bindParam(2, h($user_id), PDO::PARAM_INT);
-  $statement->bindParam(3, h($amount), PDO::PARAM_INT);
+  ";
   // SQLの実行を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, array($item_id, $user_id, $amount));
 }
 
 // カートテーブルで、カートを指定して数量を更新
 function update_cart_amount($db, $cart_id, $amount){
-  $statement = $db->prepare(
   $sql = "
     UPDATE
       carts
@@ -114,30 +99,22 @@ function update_cart_amount($db, $cart_id, $amount){
     WHERE
       cart_id = ?
     LIMIT 1
-  "
-  );
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindParam(1, h($amount), PDO::PARAM_INT);
-  $statement->bindParam(2, h($cart_id), PDO::PARAM_INT);
+  ";
   // SQLの実行を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, array($amount, $cart_id));
 }
 
 // カートテーブルから、カートを指定して行を削除
 function delete_cart($db, $cart_id){
-  $statement = $db->prepare(
   $sql = "
     DELETE FROM
       carts
     WHERE
       cart_id = ?
     LIMIT 1 
-  "
-  );
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindParam(1, h($cart_id), PDO::PARAM_INT);
+  ";
   // SQLの実行を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, array($cart_id));
 }
 
 function purchase_carts($db, $carts){
@@ -161,18 +138,15 @@ function purchase_carts($db, $carts){
 }
 
 function delete_user_carts($db, $user_id){
-  $statement = $db->prepare(
   $sql = "
     DELETE FROM
       carts
     WHERE
       user_id = ?
   "
-  );
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindParam(1, h($user_id), PDO::PARAM_INT);
+  ;
   // SQLの実行を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, array($user_id));
 }
 
 // カートの合計金額を返す
