@@ -1,5 +1,7 @@
 <?php
+// 汎用関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+// データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
 // DB利用
@@ -16,10 +18,11 @@ function get_item($db, $item_id){
     FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = ?
   ";
-
-  return fetch_query($db, $sql);
+  // レコードを取得する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return fetch_query($db, $sql, array($item_id));
 }
 
 function get_items($db, $is_open = false){
@@ -40,6 +43,7 @@ function get_items($db, $is_open = false){
     ';
   }
 
+  // 全レコードを取得する。出来なかった場合、falseを返す。
   return fetch_all_query($db, $sql);
 }
 
@@ -82,10 +86,12 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
         image,
         status
       )
-    VALUES('{$name}', {$price}, {$stock}, '{$filename}', {$status_value});
+    VALUES(?, ?, ?, ?, ?);
   ";
 
-  return execute_query($db, $sql);
+  // SQL文を実行する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return execute_query($db, $sql, array($name, $price, $stock, $filename, $status_value));
 }
 
 function update_item_status($db, $item_id, $status){
@@ -93,13 +99,15 @@ function update_item_status($db, $item_id, $status){
     UPDATE
       items
     SET
-      status = {$status}
+      status = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
   
-  return execute_query($db, $sql);
+  // SQL文を実行する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return execute_query($db, $sql, array($status, $item_id));
 }
 
 function update_item_stock($db, $item_id, $stock){
@@ -107,13 +115,15 @@ function update_item_stock($db, $item_id, $stock){
     UPDATE
       items
     SET
-      stock = {$stock}
+      stock = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
   
-  return execute_query($db, $sql);
+  // SQL文を実行する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return execute_query($db, $sql, array($stock, $item_id));
 }
 
 function destroy_item($db, $item_id){
@@ -136,17 +146,21 @@ function delete_item($db, $item_id){
     DELETE FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
   
-  return execute_query($db, $sql);
+  // SQL文を実行する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return execute_query($db, $sql, array($item_id));
 }
 
 
 // 非DB
 
+// 商品が公開されているかを判定
 function is_open($item){
+  // 商品のステータスが1の時falseを返す
   return $item['status'] === 1;
 }
 
@@ -165,11 +179,13 @@ function validate_item($name, $price, $stock, $filename, $status){
 }
 
 function is_valid_item_name($name){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
   if(is_valid_length($name, ITEM_NAME_LENGTH_MIN, ITEM_NAME_LENGTH_MAX) === false){
     set_error('商品名は'. ITEM_NAME_LENGTH_MIN . '文字以上、' . ITEM_NAME_LENGTH_MAX . '文字以内にしてください。');
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
@@ -179,30 +195,43 @@ function is_valid_item_price($price){
     set_error('価格は0以上の整数で入力してください。');
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
 function is_valid_item_stock($stock){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
   if(is_positive_integer($stock) === false){
     set_error('在庫数は0以上の整数で入力してください。');
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
+// $filename変数に値があるかどうか判定（ある：true　ブランク：false）
 function is_valid_item_filename($filename){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
+  // $failename変数の値がブランクの場合
   if($filename === ''){
+    // $is_valid変数にfalseを代入
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
+// $status変数がopne又はcloseかどうかを判定（trueかfalseを返す）
 function is_valid_item_status($status){
+  // $is_valid変数にtrueを代入
   $is_valid = true;
+  // $statusの値がアイテム公開ステータス配列のキー名に存在しない場合
   if( array_key_exists($status,PERMITTED_ITEM_STATUSES) === false){
+    // $is_valid変数にfalseを代入
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }

@@ -1,5 +1,7 @@
 <?php
+// 汎用関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+// データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
 function get_user($db, $user_id){
@@ -12,11 +14,13 @@ function get_user($db, $user_id){
     FROM
       users
     WHERE
-      user_id = {$user_id}
+      user_id = ?
     LIMIT 1
   ";
 
-  return fetch_query($db, $sql);
+  // レコードを取得する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return fetch_query($db, $sql, array($user_id));
 }
 
 function get_user_by_name($db, $name){
@@ -29,23 +33,28 @@ function get_user_by_name($db, $name){
     FROM
       users
     WHERE
-      name = '{$name}'
+      name = ?
     LIMIT 1
   ";
 
-  return fetch_query($db, $sql);
+  // レコードを取得する。出来なかった場合、falseを返す。
+  // 値をバインドしながら実行
+  return fetch_query($db, $sql, array($name));
 }
 
 function login_as($db, $name, $password){
   $user = get_user_by_name($db, $name);
   if($user === false || $user['password'] !== $password){
+    // falseを返す
     return false;
   }
+  // セッションにキーと値をセットする
   set_session('user_id', $user['user_id']);
   return $user;
 }
 
 function get_login_user($db){
+  // 変数にセッションの「user_id」キーに入っている値を代入する
   $login_user_id = get_session('user_id');
 
   return get_user($db, $login_user_id);
@@ -59,7 +68,9 @@ function regist_user($db, $name, $password, $password_confirmation) {
   return insert_user($db, $name, $password);
 }
 
+// ユーザーが管理者かどうか判定
 function is_admin($user){
+  // ユーザーが管理者（1）ならtrue、違う場合はfalseを返す
   return $user['type'] === USER_TYPE_ADMIN;
 }
 
@@ -70,16 +81,25 @@ function is_valid_user($name, $password, $password_confirmation){
   return $is_valid_user_name && $is_valid_password ;
 }
 
+// $nameの値がユーザー名の規定に沿っているか判定
 function is_valid_user_name($name) {
+  // 変数にtrueを代入
   $is_valid = true;
+  // $nameの値の長さが、規定の長さの範囲内じゃない場合
   if(is_valid_length($name, USER_NAME_LENGTH_MIN, USER_NAME_LENGTH_MAX) === false){
+    // セッションにエラー文をセットする
     set_error('ユーザー名は'. USER_NAME_LENGTH_MIN . '文字以上、' . USER_NAME_LENGTH_MAX . '文字以内にしてください。');
+    // 変数にfalseを代入
     $is_valid = false;
   }
+  // 変数が正の整数かアルファベット1文字以上ではない場合
   if(is_alphanumeric($name) === false){
+    // セッションにエラー文をセットする
     set_error('ユーザー名は半角英数字で入力してください。');
+    // 変数にfalseを代入
     $is_valid = false;
   }
+  // $is_valid変数を返す
   return $is_valid;
 }
 
@@ -104,9 +124,11 @@ function insert_user($db, $name, $password){
   $sql = "
     INSERT INTO
       users(name, password)
-    VALUES ('{$name}', '{$password}');
+    VALUES (?, ?);
   ";
-
-  return execute_query($db, $sql);
+  
+  // SQLの実行を返す
+  // 値をバインドしながら実行
+  return execute_query($db, $sql, array($name, $password));
 }
 

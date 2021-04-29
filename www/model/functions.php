@@ -154,12 +154,12 @@ function is_valid_length($string, $minimum_length, $maximum_length = PHP_INT_MAX
   return ($minimum_length <= $length) && ($length <= $maximum_length);
 }
 
-// 変数が正の整数かアルファベット1文字以上の場合、返す
+// 変数が正の整数かアルファベット1文字以上か判定
 function is_alphanumeric($string){
   return is_valid_format($string, REGEXP_ALPHANUMERIC);
 }
 
-// 変数が正の整数の場合、返す
+// 変数が正の整数か判定
 function is_positive_integer($string){
   return is_valid_format($string, REGEXP_POSITIVE_INTEGER);
 }
