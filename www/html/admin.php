@@ -11,12 +11,15 @@ require_once MODEL_PATH . 'item.php';
 // ログインチェックを行うため、セッションを開始する
 session_start();
 
+// ログインしていない場合、ログインページまでリダイレクト
+// （セッションにユーザーIDが入っていない場合）
 if(is_logined() === false){
+  // ログインページまでリダイレクト
   redirect_to(LOGIN_URL);
 }
 
 $db = get_db_connect();
-
+// ログインユーザーの情報を代入
 $user = get_login_user($db);
 
 if(is_admin($user) === false){

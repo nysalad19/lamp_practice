@@ -4,6 +4,7 @@ require_once MODEL_PATH . 'functions.php';
 // データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
+// ユーザーIDを指定して、ユーザーテーブルから情報を取得
 function get_user($db, $user_id){
   $sql = "
     SELECT
@@ -53,10 +54,13 @@ function login_as($db, $name, $password){
   return $user;
 }
 
+// ログインしているユーザー情報を取得する
+// （セッションの「user_id」キーに保存されている値を元にユーザーテーブルから情報を取得）
 function get_login_user($db){
   // 変数にセッションの「user_id」キーに入っている値を代入する
   $login_user_id = get_session('user_id');
-
+  
+  // ユーザーテーブルから情報を取得して返す
   return get_user($db, $login_user_id);
 }
 
