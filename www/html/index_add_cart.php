@@ -15,7 +15,17 @@ $db = get_db_connect();
 $user = get_login_user($db);
 
 
+// POST送信で送られてきた情報を取得
 $item_id = get_post('item_id');
+$token = get_post('token');
+
+// ポストで送られてきたトークンと、セッションのトークンが一致しない場合
+if (is_valid_csrf_token($token) === false) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // ログインページへリダイレクト
+	redirect_to(LOGIN_URL);
+}
 
 if(add_cart($db,$user['user_id'], $item_id)){
   set_message('カートに商品を追加しました。');
@@ -23,4 +33,5 @@ if(add_cart($db,$user['user_id'], $item_id)){
   set_error('カートの更新に失敗しました。');
 }
 
+// トップページへリダイレクト
 redirect_to(HOME_URL);

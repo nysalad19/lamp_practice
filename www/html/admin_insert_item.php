@@ -18,12 +18,22 @@ if(is_admin($user) === false){
   redirect_to(LOGIN_URL);
 }
 
+// POST送信で送られてきた情報を取得
 $name = get_post('name');
 $price = get_post('price');
 $status = get_post('status');
 $stock = get_post('stock');
+$token = get_post('token');
 
 $image = get_file('image');
+
+// ポストで送られてきたトークンと、セッションのトークンが一致しない場合
+if (is_valid_csrf_token($token) === false) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // ログインページへリダイレクト
+	redirect_to(LOGIN_URL);
+}
 
 if(regist_item($db, $name, $price, $stock, $status, $image)){
   set_message('商品を登録しました。');
@@ -31,5 +41,5 @@ if(regist_item($db, $name, $price, $stock, $status, $image)){
   set_error('商品の登録に失敗しました。');
 }
 
-
+// 管理者ページへリダイレクト
 redirect_to(ADMIN_URL);

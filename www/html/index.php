@@ -17,6 +17,9 @@ if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
 
+// トークンを生成
+$token = get_csrf_token();
+
 // PDOを取得
 $db = get_db_connect();
 // PDOを利用してログインユーザーのデータを取得
