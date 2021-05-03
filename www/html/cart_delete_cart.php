@@ -14,7 +14,17 @@ if(is_logined() === false){
 $db = get_db_connect();
 $user = get_login_user($db);
 
+// POST送信で送られてきた情報を取得
 $cart_id = get_post('cart_id');
+$token = get_post('token');
+
+// ポストで送られてきたトークンと、セッションのトークンが一致しない場合
+if (is_valid_csrf_token($token) === false) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // ログインページへリダイレクト
+	redirect_to(LOGIN_URL);
+}
 
 if(delete_cart($db, $cart_id)){
   set_message('カートを削除しました。');

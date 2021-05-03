@@ -18,8 +18,17 @@ if(is_admin($user) === false){
   redirect_to(LOGIN_URL);
 }
 
+// POST送信で送られてきた情報を取得
 $item_id = get_post('item_id');
 $stock = get_post('stock');
+
+// ポストで送られてきたトークンと、セッションのトークンが一致しない場合
+if (is_valid_csrf_token($token) === false) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // ログインページへリダイレクト
+	redirect_to(LOGIN_URL);
+}
 
 if(update_item_stock($db, $item_id, $stock)){
   set_message('在庫数を変更しました。');

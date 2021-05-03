@@ -9,9 +9,19 @@ if(is_logined() === true){
   redirect_to(HOME_URL);
 }
 
+// POST送信で送られてきた情報を取得
 $name = get_post('name');
 $password = get_post('password');
 $password_confirmation = get_post('password_confirmation');
+$token = get_post('token');
+
+// ポストで送られてきたトークンと、セッションのトークンが一致しない場合
+if (is_valid_csrf_token($token) === false) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // サインアップページへリダイレクト
+	redirect_to(SIGNUP_URL);
+}
 
 $db = get_db_connect();
 
