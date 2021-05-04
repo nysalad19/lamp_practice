@@ -4,8 +4,7 @@ require_once MODEL_PATH . 'functions.php';
 // データベース接続用のファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
-// 指定したカートのユーザーIDの情報を
-// カートテーブルとアイテムテーブルから取得する
+// ユーザーの情報をカートテーブルとアイテムテーブルから取得する
 function get_user_carts($db, $user_id){
   $sql = "
     SELECT
@@ -122,26 +121,92 @@ function delete_cart($db, $cart_id){
   return execute_query($db, $sql, array($cart_id));
 }
 
+// カートの中身を購入して、カート情報を削除する
+// 不備がある場合、falseを返す
 function purchase_carts($db, $carts){
-  // カートに商品がある場合（$carts変数に値が入っている場合）
+  // カートの中身に問題がある場合(中身なし、未公開、在庫足りない、エラー文ありのいずれか)
   if(validate_cart_purchase($carts) === false){
     // falseを返す
     return false;
   }
   // カートの中身を取り出す（変数に入っている値を繰り返し取り出す）
   foreach($carts as $cart){
+    // 商品の在庫数更新ができなかった場合
     if(update_item_stock(
         $db, 
         $cart['item_id'], 
         $cart['stock'] - $cart['amount']
       ) === false){
+      // セッションにエラー文をセットする
       set_error($cart['name'] . 'の購入に失敗しました。');
     }
   }
   
+  // カート情報を消す
   delete_user_carts($db, $carts[0]['user_id']);
 }
 
+/*
+// カートの中身を購入して、カート情報を削除する
+// 不備がある場合、falseを返す
+function purchase_carts($db, $carts, $user_id){
+  
+    // カートの中身に不備がない場合、購入履歴テーブルにデータを作成
+    if(validate_cart_purchase($carts) === false) {
+    // falseを返す
+    return false;
+    } else {
+      $sql = "
+      INSERT INTO history
+        (purchased, user_id)
+      VALUES
+        (NOW(), ?)
+      ";
+      // SQLの実行
+      // 値をバインドしながら実行
+      execute_query($db, $sql, array($user_id));
+    }
+    
+    //order_idを取得
+    $order_id = $db->lastInsertId();
+    
+    foreach($carts as $cart){
+      $sql = "
+      INSERT INTO details
+        (order_id, item_id,	price, amount)
+      VALUES
+        ($order_id, ?, ?, ?)
+      ";
+      // SQLの実行
+      // 値をバインドしながら実行
+      execute_query($db, $sql, array($cart['item_id'], $cart['price'], $cart['amount']));
+    }
+    
+    // 商品の在庫数更新
+    if(update_item_stock(
+        $db, 
+        $cart['item_id'], 
+        $cart['stock'] - $cart['amount']
+      // 購入数が在庫数を上回る場合
+      ) === false){
+      // セッションにエラー文をセットする
+      set_error($cart['name'] . 'の購入に失敗しました。');
+      }
+    
+    // 上記の処理中にエラーがあった場合
+    if(count(get_error()) !== 0) {
+      // セッションにエラー文をセットする
+      set_error('商品の購入に失敗しました。');
+      // falseを返す
+      return false
+    }
+    
+  // カート情報を消す
+  delete_user_carts($db, $carts[0]['user_id']);
+}
+*/
+
+// 指定したユーザーのcartsテーブルの情報を消す
 function delete_user_carts($db, $user_id){
   $sql = "
     DELETE FROM
@@ -168,9 +233,9 @@ function sum_carts($carts){
   return $total_price;
 }
 
-// $carts変数に値が入っている場合falseを返し、
-// 値が入っていない場合、商品が公開されていない場合、
-// 在庫数が足りない場合はfalseを返してエラー文をセッションに入れる
+// カートの中身を検証する
+// カートの中身がない、商品が公開されていない、在庫数が足りない、エラー文がセットされているときはfalse
+// それ以外のときはtrueを返す
 function validate_cart_purchase($carts){
   // $cart変数に値が入っていない場合
   if(count($carts) === 0){

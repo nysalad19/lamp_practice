@@ -9,5 +9,5 @@ CREATE TABLE details (
 	order_id INT(11) NOT NULL,
 	item_id INT(11) NOT NULL,
 	price INT(11) NOT NULL,
-	amount INT(11) NOT NULL,
+	amount INT(11) NOT NULL
 );
