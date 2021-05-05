@@ -121,90 +121,63 @@ function delete_cart($db, $cart_id){
   return execute_query($db, $sql, array($cart_id));
 }
 
-// カートの中身を購入して、カート情報を削除する
-// 不備がある場合、falseを返す
-function purchase_carts($db, $carts){
-  // カートの中身に問題がある場合(中身なし、未公開、在庫足りない、エラー文ありのいずれか)
-  if(validate_cart_purchase($carts) === false){
-    // falseを返す
-    return false;
-  }
-  // カートの中身を取り出す（変数に入っている値を繰り返し取り出す）
-  foreach($carts as $cart){
-    // 商品の在庫数更新ができなかった場合
-    if(update_item_stock(
-        $db, 
-        $cart['item_id'], 
-        $cart['stock'] - $cart['amount']
-      ) === false){
-      // セッションにエラー文をセットする
-      set_error($cart['name'] . 'の購入に失敗しました。');
-    }
-  }
-  
-  // カート情報を消す
-  delete_user_carts($db, $carts[0]['user_id']);
-}
-
-/*
-// カートの中身を購入して、カート情報を削除する
+// カートの中身を購入、購入履歴テーブルと購入明細テーブルにデータ作成、カート情報削除
 // 不備がある場合、falseを返す
 function purchase_carts($db, $carts, $user_id){
+  // 購入履歴テーブルにデータを作成（カートの中身に不備がない場合）
+  if(validate_cart_purchase($carts) === false) {
+  // falseを返す
+  return false;
+  } else {
+    $sql = "
+    INSERT INTO history
+      (purchased, user_id)
+    VALUES
+      (NOW(), ?)
+    ";
+    // SQLの実行
+    // 値をバインドしながら実行
+    execute_query($db, $sql, array($user_id));
+  }
   
-    // カートの中身に不備がない場合、購入履歴テーブルにデータを作成
-    if(validate_cart_purchase($carts) === false) {
+  //order_idを取得
+  $order_id = $db->lastInsertId();
+  
+  // 購入履歴テーブルにデータを作成
+  foreach($carts as $cart){
+    $sql = "
+    INSERT INTO details
+      (order_id, item_id,	price, amount)
+    VALUES
+      ($order_id, ?, ?, ?)
+    ";
+    // SQLの実行
+    // 値をバインドしながら実行
+    execute_query($db, $sql, array($cart['item_id'], $cart['price'], $cart['amount']));
+  }
+  
+  // 商品の在庫数更新
+  if(update_item_stock(
+      $db, 
+      $cart['item_id'], 
+      $cart['stock'] - $cart['amount']
+    // 購入数が在庫数を上回る場合
+    ) === false){
+    // セッションにエラー文をセットする
+    set_error($cart['name'] . 'の購入に失敗しました。');
+    }
+  
+  // 上記の処理中にエラーがあった場合
+  if(count(get_error()) !== 0) {
+    // セッションにエラー文をセットする
+    set_error('商品の購入に失敗しました。');
     // falseを返す
     return false;
-    } else {
-      $sql = "
-      INSERT INTO history
-        (purchased, user_id)
-      VALUES
-        (NOW(), ?)
-      ";
-      // SQLの実行
-      // 値をバインドしながら実行
-      execute_query($db, $sql, array($user_id));
-    }
-    
-    //order_idを取得
-    $order_id = $db->lastInsertId();
-    
-    foreach($carts as $cart){
-      $sql = "
-      INSERT INTO details
-        (order_id, item_id,	price, amount)
-      VALUES
-        ($order_id, ?, ?, ?)
-      ";
-      // SQLの実行
-      // 値をバインドしながら実行
-      execute_query($db, $sql, array($cart['item_id'], $cart['price'], $cart['amount']));
-    }
-    
-    // 商品の在庫数更新
-    if(update_item_stock(
-        $db, 
-        $cart['item_id'], 
-        $cart['stock'] - $cart['amount']
-      // 購入数が在庫数を上回る場合
-      ) === false){
-      // セッションにエラー文をセットする
-      set_error($cart['name'] . 'の購入に失敗しました。');
-      }
-    
-    // 上記の処理中にエラーがあった場合
-    if(count(get_error()) !== 0) {
-      // セッションにエラー文をセットする
-      set_error('商品の購入に失敗しました。');
-      // falseを返す
-      return false
-    }
+  }
     
   // カート情報を消す
   delete_user_carts($db, $carts[0]['user_id']);
 }
-*/
 
 // 指定したユーザーのcartsテーブルの情報を消す
 function delete_user_carts($db, $user_id){
