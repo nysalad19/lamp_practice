@@ -168,7 +168,7 @@ function purchase_carts($db, $carts, $user_id){
     }
   
   // 上記の処理中にエラーがあった場合
-  if(count(get_error()) !== 0) {
+  if(count(get_errors()) !== 0) {
     // セッションにエラー文をセットする
     set_error('商品の購入に失敗しました。');
     // falseを返す

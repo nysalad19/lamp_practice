@@ -21,6 +21,7 @@ if(is_admin($user) === false){
 // POST送信で送られてきた情報を取得
 $item_id = get_post('item_id');
 $stock = get_post('stock');
+$token = get_post('token');
 
 // ポストで送られてきたトークンと、セッションのトークンが一致しない場合
 if (is_valid_csrf_token($token) === false) {

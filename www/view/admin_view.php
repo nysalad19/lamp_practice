@@ -69,6 +69,7 @@
             <td><?php print h($item['name']); ?></td>
             <td><?php print(number_format($item['price'])); ?>円</td>
             <td>
+              <!--在庫数の更新-->
               <form method="post" action="admin_change_stock.php">
                 <div class="form-group">
                   <!-- sqlインジェクション確認のためあえてtext -->
@@ -83,6 +84,7 @@
             </td>
             <td>
 
+              <!--公開ステータスの更新-->
               <form method="post" action="admin_change_status.php" class="operation">
                 <?php if(is_open($item) === true){ ?>
                   <input type="submit" value="公開 → 非公開" class="btn btn-secondary">
@@ -96,6 +98,7 @@
                 <input type="hidden" name="token" value="<?php print $token; ?>">
               </form>
 
+              <!--商品の削除-->
               <form method="post" action="admin_delete_item.php">
                 <input type="submit" value="削除" class="btn btn-danger delete">
                 <input type="hidden" name="item_id" value="<?php print($item['item_id']); ?>">
