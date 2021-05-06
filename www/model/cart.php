@@ -124,6 +124,9 @@ function delete_cart($db, $cart_id){
 // カートの中身を購入、購入履歴テーブルと購入明細テーブルにデータ作成、カート情報削除
 // 不備がある場合、falseを返す
 function purchase_carts($db, $carts, $user_id){
+  // トランザクション開始
+  $db->beginTransaction();
+  
   // 購入履歴テーブルにデータを作成（カートの中身に不備がない場合）
   if(validate_cart_purchase($carts) === false) {
   // falseを返す
@@ -166,17 +169,18 @@ function purchase_carts($db, $carts, $user_id){
     // セッションにエラー文をセットする
     set_error($cart['name'] . 'の購入に失敗しました。');
     }
-  
-  // 上記の処理中にエラーがあった場合
-  if(count(get_errors()) !== 0) {
-    // セッションにエラー文をセットする
-    set_error('商品の購入に失敗しました。');
-    // falseを返す
-    return false;
-  }
     
-  // カート情報を消す
-  delete_user_carts($db, $carts[0]['user_id']);
+  // 上記の処理中にエラーがない場合
+  if(count(get_errors()) === 0) {
+    // コミット処理
+    $db->commit();
+    
+    // カート情報を消す
+    delete_user_carts($db, $carts[0]['user_id']);
+  } else {
+    // ロールバック処理
+    $db->rollback();
+  }
 }
 
 // 指定したユーザーのcartsテーブルの情報を消す
