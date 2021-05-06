@@ -244,3 +244,52 @@ function validate_cart_purchase($carts){
   // trueを返す
   return true;
 }
+
+// 商品購入履歴の取得
+// 管理者の場合は全ユーザーのデータを取得し、
+// 一般ユーザーの場合はそのユーザーのデータのみを取得
+function get_purchased_history($db, $user){
+  // 変数の初期化
+  $params = array();
+  
+  // 管理者と一般ユーザー共通のSQL部分
+  $sql = "
+    SELECT
+      history.order_id,
+      history.purchased,
+      SUM(details.price * details.amount) AS total_price
+    FROM
+      history
+    INNER JOIN
+      details
+    ON
+      history.order_id = details.order_id
+    "
+    ;
+    
+  // 一般ユーザーの場合、ユーザーIDでカラムを絞り込み
+  if(is_admin($user) === false){
+    // SQLにWHERE句を追記
+    $sql.= "
+      WHERE
+        history.user_id = ? 
+      "
+      ;
+    // バインド用に変数に配列をセット
+    $params = array($user['user_id']);
+  }
+  
+  // 管理者と一般ユーザー共通のSQL部分
+  $sql.= "
+    GROUP BY
+      history.order_id
+    ORDER BY
+      purchased DESC
+  "
+  ;
+  
+  // 全レコードを取得して返す、取得できなかった場合falseを返す
+  // 一般ユーザーの場合値をバインドしながら実行し、
+  // 管理者の場合は空の配列なのでバインドが無効化
+  return fetch_all_query($db, $sql, $params);
+}
