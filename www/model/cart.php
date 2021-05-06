@@ -180,6 +180,8 @@ function purchase_carts($db, $carts, $user_id){
   } else {
     // ロールバック処理
     $db->rollback();
+    // falseを返す
+    return false;
   }
 }
 
