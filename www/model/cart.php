@@ -294,6 +294,9 @@ function get_purchased_history($db, $user){
 
 // 商品購入明細の取得
 function get_purchased_details($db, $order_id, $user){
+  // 変数の設定
+  $params = array($order_id);
+  
   $sql = "
     SELECT
       items.name,
@@ -312,11 +315,21 @@ function get_purchased_details($db, $order_id, $user){
       details.order_id = history.order_id
     WHERE
       history.order_id = ?
-    AND
-      history.user_id = ?
     "
     ;
+    
+  // 一般ユーザーの場合、ユーザーIDを指定
+  if(is_admin($user) === false){
+    // SQLにANDを追記
+    $sql.= "
+      AND
+        history.user_id = ?
+      "
+      ;
+    // バインド用に変数に配列をセット
+    $params = array($order_id, $user['user_id']);
+  }
 
   // 全レコードを取得して返す、取得できなかった場合falseを返す
-  return fetch_all_query($db, $sql, array($order_id, $user['user_id']));
+  return fetch_all_query($db, $sql, $params);
 }
