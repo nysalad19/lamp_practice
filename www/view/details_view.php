@@ -50,6 +50,11 @@
           <?php } ?>
         </tbody>
     </table>
+    <?php
+    var_dump($user);
+    var_dump($history['order_id']);
+    var_dump($details);
+    ?>
   </div>
 </body>
 </html>

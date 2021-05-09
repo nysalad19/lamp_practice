@@ -20,15 +20,23 @@ $user = get_login_user($db);
 $order_id = get_post('order_id');
 $purchased = get_post('purchased');
 $total_price = get_post('total_price');
+$token = get_post('token');
 
-// 今までのトークンを削除するために、トークンを生成
-$token = get_csrf_token();
+// ポストで送られてきたトークンと、セッションのトークンが一致しない場合
+if (is_valid_csrf_token($token) === false) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // ログインページへリダイレクト
+	redirect_to(LOGIN_URL);
+}
 
 // 商品購入履歴の取得
 $history = get_purchased_history($db, $user);
 
+$order_id = get_order_id($db, $user['user_id']);
+
 // 商品購入明細の取得
-$details = get_purchased_details($db, $order_id);
+$details = get_purchased_details($db, $user, $history);
 
 // ビューの読み込み。
 include_once VIEW_PATH . 'details_view.php';

@@ -292,6 +292,20 @@ function get_purchased_history($db, $user){
   return fetch_all_query($db, $sql, $params);
 }
 
+function get_order_id($db, $user){
+  $sql = "
+    SELECT
+      order_id
+    FROM
+      history
+    WHERE
+      user_id = ?
+  ";
+  // レコードを取得して返す
+  // 値をバインドしながら実行
+  return fetch_query($db, $sql, array($user['user_id']));
+}
+
 // 商品購入明細の取得
 function get_purchased_details($db, $order_id){
   $sql = "
@@ -299,15 +313,21 @@ function get_purchased_details($db, $order_id){
       items.name,
       details.price,
       details.amount,
-      details.price * details.amount AS subtotal
+      details.price * details.amount AS subtotal,
+      history.order_id,
+      history.purchased
     FROM
       items
     RIGHT OUTER JOIN
       details
     ON
       items.item_id = details.item_id
+    INNER JOIN
+      history
+    ON
+      details.order_id = history.order_id
     WHERE
-      details.order_id = ?
+      history.order_id = ?
     "
     ;
 
