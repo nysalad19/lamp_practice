@@ -30,8 +30,8 @@ if (is_valid_csrf_token($token) === false) {
 	redirect_to(LOGIN_URL);
 }
 
-// 商品購入履歴の取得
-$history = get_purchased_history($db, $user);
+// 特定の商品購入履歴の取得
+$history = get_specific_purchased_history($db, $order_id);
 
 // 商品購入明細の取得
 $details = get_purchased_details($db, $order_id, $user);

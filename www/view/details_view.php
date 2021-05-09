@@ -23,9 +23,9 @@
         <tbody>
           <tr>
             <!--商品名のタグインジェクションを防ぐためのhtmlエスケープ処理-->
-            <td><?php print h($order_id); ?></td>
-            <td><?php print h($purchased); ?></td>
-            <td><?php print(number_format($total_price)); ?>円</td>
+            <td><?php print h($history['order_id']); ?></td>
+            <td><?php print h($history['purchased']); ?></td>
+            <td><?php print(number_format($history['total_price'])); ?>円</td>
           </tr>
         </tbody>
     </table>
@@ -51,5 +51,10 @@
         </tbody>
     </table>
   </div>
+  
+  <?php
+  var_dump($history);
+  ?>
+  
 </body>
 </html>

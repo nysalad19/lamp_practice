@@ -292,6 +292,32 @@ function get_purchased_history($db, $user){
   return fetch_all_query($db, $sql, $params);
 }
 
+// 特定の商品購入履歴の取得
+// 管理者の場合は全ユーザーのデータを取得し、一般ユーザーの場合はそのユーザーのデータのみを取得
+function get_specific_purchased_history($db, $order_id){
+  // 管理者と一般ユーザー共通のSQL部分
+  $sql = "
+    SELECT
+      history.order_id,
+      history.purchased,
+      SUM(details.price * details.amount) AS total_price
+    FROM
+      history
+    INNER JOIN
+      details
+    ON
+      history.order_id = details.order_id
+    WHERE
+      history.order_id = ?
+    GROUP BY
+      history.order_id
+    "
+    ;
+  // 全レコードを取得して返す、取得できなかった場合falseを返す
+  // 一般ユーザーの場合値をバインドしながら実行し、管理者の場合は空の配列なのでバインドが無効化
+  return fetch_query($db, $sql, array($order_id));
+}
+
 // 商品購入明細の取得
 function get_purchased_details($db, $order_id, $user){
   // 変数の設定
