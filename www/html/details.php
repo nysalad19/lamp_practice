@@ -22,6 +22,8 @@ $token = get_csrf_token();
 // 商品購入履歴の取得
 $history = get_purchased_history($db, $user);
 
-// ビューの読み込み。
-include_once VIEW_PATH . 'history_view.php';
+// 商品購入明細の取得
+$details = get_purchased_details($db, $user, $history);
 
+// ビューの読み込み。
+include_once VIEW_PATH . 'details_view.php';

@@ -36,6 +36,8 @@ define('HOME_URL', '/lamp_practice/www/html/index.php');
 define('CART_URL', '/lamp_practice/www/html/cart.php');
 // 購入完了ページのURLを定義
 define('FINISH_URL', '/lamp_practice/www/html/finish.php');
+// 購入履歴ページのURLを定義
+define('HISTORY_URL', '/lamp_practice/www/html/history.php');
 // 管理ページのURLを定義
 define('ADMIN_URL', '/lamp_practice/www/html/admin.php');
 

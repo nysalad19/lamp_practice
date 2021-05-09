@@ -246,8 +246,7 @@ function validate_cart_purchase($carts){
 }
 
 // 商品購入履歴の取得
-// 管理者の場合は全ユーザーのデータを取得し、
-// 一般ユーザーの場合はそのユーザーのデータのみを取得
+// 管理者の場合は全ユーザーのデータを取得し、一般ユーザーの場合はそのユーザーのデータのみを取得
 function get_purchased_history($db, $user){
   // 変数の初期化
   $params = array();
@@ -289,7 +288,45 @@ function get_purchased_history($db, $user){
   ;
   
   // 全レコードを取得して返す、取得できなかった場合falseを返す
-  // 一般ユーザーの場合値をバインドしながら実行し、
-  // 管理者の場合は空の配列なのでバインドが無効化
+  // 一般ユーザーの場合値をバインドしながら実行し、管理者の場合は空の配列なのでバインドが無効化
+  return fetch_all_query($db, $sql, $params);
+}
+
+// 商品購入明細の取得
+// 管理者の場合は全ユーザーのデータを取得し、一般ユーザーの場合はそのユーザーのデータのみを取得
+function get_purchased_details($db, $user, $history){
+  // 変数の初期化
+  $params = array();
+  
+  // 管理者と一般ユーザー共通のSQL部分
+  $sql = "
+    SELECT
+      items.name,
+      details.price,
+      details.amount,
+      details.price * details.amount AS subtotal
+    FROM
+      items
+    RIGHT OUTER JOIN
+      details
+    ON
+      items.item_id = details.item_id
+    "
+    ;
+    
+  // 一般ユーザーの場合、ユーザーIDでカラムを絞り込み
+  if(is_admin($user) === false){
+    // SQLにWHERE句を追記
+    $sql.= "
+      WHERE
+        details.order_id = ? 
+      "
+      ;
+    // バインド用に変数に配列をセット
+    $params = array($history['order_id']);
+  }
+  
+  // 全レコードを取得して返す、取得できなかった場合falseを返す
+  // 一般ユーザーの場合値をバインドしながら実行し、管理者の場合は空の配列なのでバインドが無効化
   return fetch_all_query($db, $sql, $params);
 }
