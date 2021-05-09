@@ -32,9 +32,9 @@
             <td>
               <form method="post" action="details.php">
                 <input type="submit" value="購入明細表示" class="btn btn-secondary">
-                <input type="hidden" name="order_id" value="<?php print($value['order_id']); ?>">
-                <input type="hidden" name="purchased" value="<?php print($value['purchased']); ?>">
-                <input type="hidden" name="total_price" value="<?php print($value['total_price']); ?>">
+                <input type="hidden" name="order_id" value="<?php print $value['order_id']; ?>">
+                <input type="hidden" name="purchased" value="<?php print $value['purchased']; ?>">
+                <input type="hidden" name="total_price" value="<?php print $value['total_price']; ?>">
                 <!--トークンの埋め込み-->
                 <input type="hidden" name="token" value="<?php print $token; ?>">
               </form>

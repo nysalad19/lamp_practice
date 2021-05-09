@@ -292,30 +292,14 @@ function get_purchased_history($db, $user){
   return fetch_all_query($db, $sql, $params);
 }
 
-function get_order_id($db, $user){
-  $sql = "
-    SELECT
-      order_id
-    FROM
-      history
-    WHERE
-      user_id = ?
-  ";
-  // レコードを取得して返す
-  // 値をバインドしながら実行
-  return fetch_query($db, $sql, array($user['user_id']));
-}
-
 // 商品購入明細の取得
-function get_purchased_details($db, $order_id){
+function get_purchased_details($db, $order_id, $user){
   $sql = "
     SELECT
       items.name,
       details.price,
       details.amount,
-      details.price * details.amount AS subtotal,
-      history.order_id,
-      history.purchased
+      details.price * details.amount AS subtotal
     FROM
       items
     RIGHT OUTER JOIN
@@ -328,9 +312,11 @@ function get_purchased_details($db, $order_id){
       details.order_id = history.order_id
     WHERE
       history.order_id = ?
+    AND
+      history.user_id = ?
     "
     ;
 
   // 全レコードを取得して返す、取得できなかった場合falseを返す
-  return fetch_all_query($db, $sql, array($order_id));
+  return fetch_all_query($db, $sql, array($order_id, $user['user_id']));
 }
