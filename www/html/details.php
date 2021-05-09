@@ -16,6 +16,11 @@ $db = get_db_connect();
 // PDOを利用してログインユーザーのデータを取得
 $user = get_login_user($db);
 
+// POST送信で送られてきた情報を取得
+$order_id = get_post('order_id');
+$purchased = get_post('purchased');
+$total_price = get_post('total_price');
+
 // 今までのトークンを削除するために、トークンを生成
 $token = get_csrf_token();
 
@@ -23,7 +28,7 @@ $token = get_csrf_token();
 $history = get_purchased_history($db, $user);
 
 // 商品購入明細の取得
-$details = get_purchased_details($db, $user, $history);
+$details = get_purchased_details($db, $order_id);
 
 // ビューの読み込み。
 include_once VIEW_PATH . 'details_view.php';
