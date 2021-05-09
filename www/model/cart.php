@@ -294,7 +294,9 @@ function get_purchased_history($db, $user){
 
 // 特定の商品購入履歴の取得
 // 管理者の場合は全ユーザーのデータを取得し、一般ユーザーの場合はそのユーザーのデータのみを取得
-function get_specific_purchased_history($db, $order_id){
+function get_specific_purchased_history($db, $order_id, $user){
+  // 変数の設定
+  $params = array($order_id);
   // 管理者と一般ユーザー共通のSQL部分
   $sql = "
     SELECT
@@ -309,13 +311,30 @@ function get_specific_purchased_history($db, $order_id){
       history.order_id = details.order_id
     WHERE
       history.order_id = ?
-    GROUP BY
-      history.order_id
     "
     ;
-  // 全レコードを取得して返す、取得できなかった場合falseを返す
-  // 一般ユーザーの場合値をバインドしながら実行し、管理者の場合は空の配列なのでバインドが無効化
-  return fetch_query($db, $sql, array($order_id));
+    
+    // 一般ユーザーの場合、ユーザーIDを指定
+      if(is_admin($user) === false){
+      // SQLにANDを追記
+      $sql.= "
+        AND
+          history.user_id = ?
+        "
+        ;
+      // バインド用に変数に配列をセット
+      $params = array($order_id, $user['user_id']);
+    }
+    
+    // 管理者と一般ユーザー共通のSQL部分
+    $sql.= "
+      GROUP BY
+        history.order_id
+      "
+      ;
+      
+  // レコードを取得して返す、取得できなかった場合falseを返す
+  return fetch_query($db, $sql, $params);
 }
 
 // 商品購入明細の取得

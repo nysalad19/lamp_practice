@@ -51,10 +51,5 @@
         </tbody>
     </table>
   </div>
-  
-  <?php
-  var_dump($history);
-  ?>
-  
 </body>
 </html>

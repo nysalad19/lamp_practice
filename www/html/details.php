@@ -19,8 +19,6 @@ $user = get_login_user($db);
 // POST送信で送られてきた情報を取得
 $token = get_post('token');
 $order_id = get_post('order_id');
-$purchased = get_post('purchased');
-$total_price = get_post('total_price');
 
 // ポストで送られてきたトークンと、セッションのトークンが一致しない場合
 if (is_valid_csrf_token($token) === false) {
@@ -31,7 +29,7 @@ if (is_valid_csrf_token($token) === false) {
 }
 
 // 特定の商品購入履歴の取得
-$history = get_specific_purchased_history($db, $order_id);
+$history = get_specific_purchased_history($db, $order_id, $user);
 
 // 商品購入明細の取得
 $details = get_purchased_details($db, $order_id, $user);
