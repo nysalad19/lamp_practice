@@ -20,6 +20,14 @@ $user = get_login_user($db);
 $token = get_post('token');
 $order_id = get_post('order_id');
 
+// $order_idが空もしくは整数以外の場合
+if ($order_id === '' || $order_id !== REGEXP_POSITIVE_INTEGER) {
+  // エラー文をセッションに保存
+  set_error('不正なアクセスです。');
+  // 履歴ページへリダイレクト
+	redirect_to(HISTORY_URL);
+}
+
 // ポストで送られてきたトークンと、セッションのトークンが一致しない場合
 if (is_valid_csrf_token($token) === false) {
   // エラー文をセッションに保存
