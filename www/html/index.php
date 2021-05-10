@@ -18,6 +18,7 @@ if(is_logined() === false){
 }
 
 // GETメソッドで送られてきた値を取得
+// 並び替えボタンの種類を値として取得
 $order = get_get('order');
 
 // トークンを生成
@@ -28,9 +29,8 @@ $db = get_db_connect();
 // PDOを利用してログインユーザーのデータを取得
 $user = get_login_user($db);
 
-// orderを渡す
 // 商品一覧用の商品データを取得
-$items = get_open_items($db);
+$items = get_open_items($db, $order);
 
 // ビューの読み込み。
 include_once VIEW_PATH . 'index_view.php';
