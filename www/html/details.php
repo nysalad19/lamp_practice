@@ -21,7 +21,7 @@ $token = get_post('token');
 $order_id = get_post('order_id');
 
 // $order_idが空もしくは整数以外の場合
-if ($order_id === '' || $order_id !== REGEXP_POSITIVE_INTEGER) {
+if ($order_id === '' || is_positive_integer($order_id) === false) {
   // エラー文をセッションに保存
   set_error('不正なアクセスです。');
   // 履歴ページへリダイレクト
