@@ -17,6 +17,9 @@ if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
 
+// GETメソッドで送られてきた値を取得
+$order = get_get('order');
+
 // トークンを生成
 $token = get_csrf_token();
 
@@ -25,6 +28,7 @@ $db = get_db_connect();
 // PDOを利用してログインユーザーのデータを取得
 $user = get_login_user($db);
 
+// orderを渡す
 // 商品一覧用の商品データを取得
 $items = get_open_items($db);
 
