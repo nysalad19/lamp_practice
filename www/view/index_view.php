@@ -18,7 +18,7 @@
           <option value="low">価格の安い順</option>
           <option value="high">価格の高い順</option>
       </select>
-      <input type="submit" value="並び替え" class="btn btn-primary">
+      <input type="submit" value="並び替え" id="aaa" class="btn btn-primary">
     </form>
   </div>
 
@@ -63,6 +63,13 @@
     var_dump($order);
     ?>
   </div>
-  
+  <script>
+    function inputChange(event){
+    console.log(event.currentTarget.value);
+    }
+    
+    let aaa = document.getElementById('aaa');
+    aaa.addEventListener('change', inputChange);
+  </script>
 </body>
 </html>
