@@ -11,15 +11,17 @@
   <!--ログイン後用ヘッダーを表示-->
   <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
   
-  <form action="index.php" method="get">
-    <select name="order">
-        <option value="new">新着順</option>
-        <option value="low">価格の安い順</option>
-        <option value="high">価格の高い順</option>
-    </select>
-    <input type="submit" value="並び替え" class="btn btn-primary">
-  </form>
-
+  <div class="text-right">
+    <form action="index.php" method="get" id="order_form">
+      <select name="order" id="order">
+          <option value="new">新着順</option>
+          <option value="low">価格の安い順</option>
+          <option value="high">価格の高い順</option>
+      </select>
+      <input type="submit" value="並び替え" class="btn btn-primary">
+    </form>
+  </div>
+  
   <div class="container">
     <h1>商品一覧</h1>
     <!--メッセージ表示（エラー文含む）-->
@@ -58,6 +60,14 @@
       </div>
     </div>
   </div>
-  
+  <script>
+    const order = document.getElementById('order');
+    const order_form = document.getElementById('order_form');
+    
+    // valueの変化があった時に
+    order.addEventListener('change', (event) => {
+      order_form.submit();
+    });
+  </script>
 </body>
 </html>
