@@ -69,7 +69,7 @@ function get_items($db, $order, $is_open = false){
 }
 
 function get_all_items($db){
-  return get_items($db);
+  return get_items($db, '');
 }
 
 function get_open_items($db, $order){
